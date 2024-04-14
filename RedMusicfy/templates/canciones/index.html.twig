@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lista de Canciones{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .card {
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Estilos adicionales para el formulario de búsqueda */
+        #search-form {
+            margin-bottom: 20px;
+        }
+
+        #search-input {
+            width: 70%; /* Ajusta el ancho del campo de entrada */
+        }
+
+        #search-button {
+            background-color: red; /* Cambia el color del botón a rojo */
+            color: white; /* Texto blanco en el botón */
+            border-color: red; /* Color del borde igual al color de fondo */
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <form id="search-form">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="search-input" placeholder="Buscar por nombre de canción">
+                    <button type="submit" class="btn btn-primary" id="search-button">Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-5 g-4">
+        {% for cancion in canciones %}
+        <div class="col mb-4">
+            <div class="card h-100">
+                <img src="{{ asset('uploads/images/' ~ cancion.fotoPortada) }}" class="card-img-top" alt="Portada de la Canción">
+                <div class="card-body">
+                    <h5 class="card-title">{{ cancion.title }}</h5>
+                    <p class="card-text">{{ cancion.author }}</p>
+                    <audio controls class="w-100">
+                        <source src="{{ asset('uploads/music/' ~ cancion.fileAudio) }}" type="audio/mp3">
+                    </audio>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    document.getElementById('search-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var searchText = document.getElementById('search-input').value.toLowerCase();
+        var cards = document.querySelectorAll('.card');
+
+        cards.forEach(function(card) {
+            var cardTitle = card.querySelector('.card-title').textContent.toLowerCase();
+            var cardText = card.querySelector('.card-text').textContent.toLowerCase();
+            if (cardTitle.includes(searchText) || cardText.includes(searchText)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}
+

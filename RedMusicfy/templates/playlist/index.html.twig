@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mis Playlists
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<style>
+		/* Estilos personalizados para la tabla */
+		.table {
+			background-color: #f8f9fa; /* Color de fondo suave */
+			color: #212529; /* Color de texto oscuro */
+		}
+
+		.table th {
+			background-color: #343a40; /* Color de fondo del encabezado */
+			color: #ffffff; /* Color de texto blanco */
+		}
+
+		.table td {
+			background-color: #ffffff; /* Color de fondo de las celdas */
+		}
+
+		/* Estilos personalizados para los enlaces */
+		a {
+			color: #dc3545; /* Color de enlace rojo */
+			text-decoration: none; /* Quitar subrayado */
+			transition: color 0.3s ease; /* Transición de color suave */
+		}
+
+		a:hover {
+			color: #343a40; /* Cambio de color al pasar el ratón */
+		}
+
+		/* Estilo para el botón "Create new" */
+		.btn-create {
+			background-color: #dc3545; /* Color de fondo rojo */
+			color: #ffffff; /* Color de texto blanco */
+			border: none; /* Quitar borde */
+			padding: 8px 16px; /* Espaciado interno */
+			border-radius: 4px; /* Bordes redondeados */
+			text-decoration: none; /* Quitar subrayado */
+			transition: background-color 0.3s ease; /* Transición de color suave */
+			margin-top: 20px; /* Margen superior */
+		}
+
+		.btn-create:hover {
+			background-color: #c82333; /* Cambio de color al pasar el ratón */
+		}
+
+		/* Estilo para los botones Ver, Editar y Eliminar */
+		.btn-action {
+			margin-right: 5px; /* Margen derecho entre botones */
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<h1 class="mt-4">Mis Playlists</h1>
+
+		<table class="table mt-4">
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Canciones</th>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for playlist in playlists %}
+					<tr>
+						<td>{{ playlist.name }}</td>
+						<td>
+							<ul>
+								{% for song in playlist.songs %}
+									<li>{{ song.title }}</li>
+								{% endfor %}
+							</ul>
+						</td>
+						<td>
+							<button class="btn btn-danger btn-action" onclick="window.location='{{ path('app_playlist_show', {'id': playlist.id}) }}'">Ver</button>
+							<button class="btn btn-secondary btn-action" onclick="window.location='{{ path('app_playlist_edit', {'id': playlist.id}) }}'">Editar</button>
+						</td>
+						<td>
+							<form method="post" action="{{ path('app_playlist_delete', {'id': playlist.id}) }}" onsubmit="return confirm('¿Estas seguro que quieres borrar la playlist?');">
+								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ playlist.id) }}">
+								<button class="btn btn-danger">Borrar</button>
+							</form>
+
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="4">No se encontraron registros</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		<a href="{{ path('app_playlist_new') }}" class="btn-create">Crear nueva</a>
+	</div>
+{% endblock %}

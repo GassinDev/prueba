@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Playlist{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title text-center mb-4">{{ playlist.name }}</h1>
+                        <img src="{{ asset('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzJvMHFkcXZxYWt0d25zMWU0aXM1Y2twZDUzMWtzNGxsM2k3ZHUxaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4oMoIbIQrvCjm/giphy.gif') }}" class="img-fluid mx-auto d-block mb-4" alt="Playlist Image">
+                        <table class="table">
+                            <tbody>
+                                {% for song in playlist.songs %}
+                                    <tr>
+                                        <td class="align-middle text-center">
+                                            <img src="{{ asset('uploads/images/' ~ song.fotoPortada) }}" class="img-thumbnail img-small w-50" alt="Song Image">
+                                        </td>
+                                        <td class="align-middle">
+                                            <h5 class="card-title">{{ song.title }}</h5>
+                                            <audio controls>
+                                                <source src="{{ asset('uploads/music/' ~ song.fileAudio) }}" type="audio/mp3">
+                                                Your browser does not support the audio element.
+                                            </audio>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="d-grid gap-2">
+                            <a href="{{ path('app_playlist_index') }}" class="btn btn-danger">Volver atrás</a>
+                            <a href="{{ path('app_playlist_edit', {'id': playlist.id}) }}" class="btn btn-danger">Editar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

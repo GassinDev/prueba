@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Playlist{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title text-center mb-4">Editar Playlist</h1>
+                        {{ include('playlist/_form.html.twig', {'button_label': 'Guardar cambios'}) }}
+                        <div class="text-center mt-3">
+                            <a href="{{ path('app_playlist_index') }}" class="btn btn-danger">Volver atrás</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

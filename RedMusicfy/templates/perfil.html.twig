@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mi Perfil
+{% endblock %}
+
+{% block stylesheets %}
+	<style>
+		.fondoPerfil {
+			background: radial-gradient(circle, #9b0000, #000000);
+			padding: 20px;
+			border-radius: 10px;
+			color: #FFFFFF;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+		}
+
+		.list-group-item {
+			background-color: rgba(255, 255, 255, 0.1);
+			color: #FFFFFF;
+			border: none;
+		}
+
+		.list-group-item:first-child {
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+		}
+
+		.list-group-item:last-child {
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+
+		img {
+			border-radius: 50%;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+		}
+
+		/* Agrega este estilo para la animación */
+		.ocultar {
+			display: none;
+			transition: max-height 0.5s ease-out;
+			max-height: 0;
+			overflow: hidden;
+		}
+
+		.mostrar {
+			display: block;
+			max-height: 1000px; /* Ajusta este valor según la altura máxima que esperas */
+		}
+
+		.profile-picture-label {
+			position: relative;
+			display: inline-block;
+		}
+
+		.profile-picture {
+			border-radius: 50%;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+			transition: filter 0.3s ease;
+		}
+
+		.profile-picture:hover {
+			filter: brightness(50%);
+		}
+
+		.profile-picture-overlay {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			color: white;
+			font-size: 16px;
+			font-weight: bold;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+
+		.profile-picture-label:hover .profile-picture-overlay {
+			opacity: 1;
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5 fondoPerfil">
+		{% if app.user %}
+			<div class="row">
+				<div class="col-md-4">
+					<form id="profile-form" action="{{ path('changePhoto', {'id': app.user.id}) }}" method="POST" enctype="multipart/form-data">
+						<label for="profile-picture" class="profile-picture-label">
+							<img src="{{ 'uploads/images/' ~ app.user.fotoPerfil }}" alt="Profile Picture" class="img-fluid profile-picture" id="profile-picture">
+							<span class="profile-picture-overlay">Cambiar foto de perfil</span>
+						</label>
+						<input type="file" id="profile-picture-input" name="profile-picture" accept="image/*" style="display: none;">
+					</form>
+				</div>
+				<div class="col-md-8">
+					<h2 class="mb-4">Información del Perfil</h2>
+					<ul class="list-group">
+						<li class="list-group-item">Nombre de usuario:
+							{{ app.user.username }}</li>
+						<li class="list-group-item">Correo electrónico:
+							{{ app.user.email }}</li>
+					</ul>
+					<button class="btn btn-danger mt-3" id="editarPerfilBtn">Editar Perfil</button>
+					<button class="btn bg-dark text-white mt-3" id="borrarPerfilBtn">Eliminar Perfil</button>
+				</div>
+				<div id="formularioEditarPerfil" class='ocultar'>
+					<h2 class="mt-5 mb-4">Editar Perfil</h2>
+					<form method="POST" action="{{ path('edit', {'id': app.user.id}) }}">
+						<div class="mb-3">
+							<label for="username" class="form-label">Nombre de usuario:</label>
+							<input type="text" class="form-control" id="username" name="username" value="{{ app.user.username }}">
+						</div>
+						<div class="mb-3">
+							<label for="email" class="form-label">Correo electrónico:</label>
+							<input type="email" class="form-control" id="email" name="email" value="{{ app.user.email }}">
+						</div>
+						<button type="submit" class="btn btn-danger">Guardar Cambios</button>
+					</form>
+				</div>
+				<div id="formularioEliminarPerfil" class='ocultar'>
+					<h2 class="mt-5 mb-4">Eliminar Perfil</h2>
+					<form method="POST" action="{{ path('app_perfil_delete', {'id': app.user.id, 'username': app.user.username}) }}">
+						<div class="mb-3">
+							<div class="mb-3">
+								<label for="username" class="form-label">Escribe "{{app.user.username}}" y pulsa el botón de confirmar</label>
+								<input type="text" class="form-control" id="username" name="textoUser">
+							</div>
+							<button type="submit" class="btn btn-danger">Confirmar</button>
+						</form>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+
+		<script>
+			document.getElementById('editarPerfilBtn').addEventListener('click', function () {
+document.getElementById('formularioEditarPerfil').classList.toggle('mostrar');
+// Si el formulario de eliminar perfil está abierto, lo cerramos
+document.getElementById('formularioEliminarPerfil').classList.remove('mostrar');
+});
+
+document.getElementById('borrarPerfilBtn').addEventListener('click', function () {
+document.getElementById('formularioEliminarPerfil').classList.toggle('mostrar');
+// Si el formulario de editar perfil está abierto, lo cerramos
+document.getElementById('formularioEditarPerfil').classList.remove('mostrar');
+});
+
+const inputFile = document.getElementById('profile-picture-input');
+
+// Cuando se haga clic en la imagen, activar el input de tipo archivo
+document.getElementById('profile-picture').addEventListener('click', function () {
+inputFile.click();
+});
+
+// Cuando se seleccione un archivo, enviar el formulario
+inputFile.addEventListener('change', function () {
+document.getElementById('profile-form').submit();
+});
+		</script>
+	{% endblock %}

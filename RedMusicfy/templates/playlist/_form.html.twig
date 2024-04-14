@@ -1,0 +1,21 @@
+{{ form_start(form) }}
+
+<div class="mb-3 d-flex align-items-center">
+    {{ form_row(form.user, {'attr': {'hidden': 'true'}}) }}
+    <p class="mb-0 ms-2">{{ app.user.id }} - {{ app.user.username }}</p>
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.name, 'Nombre de la Lista', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+</div>
+
+
+<div class="mb-3">
+    {{ form_label(form.songs, 'Seleccionar Canciones', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.songs, {'attr': {'class': 'form-select', 'multiple': 'multiple'}}) }}
+</div>
+
+<button type="submit" class="btn btn-danger">{{ button_label|default('Guardar') }}</button>
+
+{{ form_end(form) }}

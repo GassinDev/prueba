@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lista de Usuarios{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .card {
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card-img-top {
+            height: 200px; 
+            object-fit: cover; 
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-5 g-4">
+        {% for usuario in usuarios %}
+        <div class="col mb-4">
+            <div class="card h-100">
+                <img src="{{ asset('uploads/images/' ~ usuario.fotoPerfil) }}" class="card-img-top" alt="Foto de Perfil de {{ usuario.username }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ usuario.username }}</h5>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
