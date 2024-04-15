@@ -1,4 +1,4 @@
-version: '3'
+version: '3.5'
 
 services:
 
@@ -21,8 +21,15 @@ services:
   db:
     image: mysql:8.0
     environment:
-      MYSQL_DATABASE: "mySpotify"
-      MYSQL_USER: "root"
-      MYSQL_PASSWORD: ""
+      - MYSQL_DATABASE={VARIABLE_NAME}
+      - MYSQL_ROOT_PASSWORD={VARIABLE_PASSWORD}
     ports:
       - "3306:3306"
+    volumes:
+      - symfony-data:/var/lib/mysqul
+
+volumes:
+  symfony-data:
+
+EL USUARIO DE LA BASE DE DATOS SUELE SER ROOT
+MADE BY GASSIN
